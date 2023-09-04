@@ -8,7 +8,7 @@ import {OFTV2} from "lz/token/oft/v2/OFTV2.sol";
  * @author  0xAurelou
  * @title   ERC20 LayerZero
  * @dev     Do not use in production this is for research purposes only
- * @notice  ERC20 using LayerZero
+ * @notice  ERC20 using LayerZero contract
  */
 
 contract LzERC20Arb is OFTV2 {

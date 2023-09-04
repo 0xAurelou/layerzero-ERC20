@@ -4,8 +4,6 @@ pragma solidity 0.8.19;
 
 import {OFTV2} from "lz/token/oft/v2/OFTV2.sol";
 
-import "forge-std/console.sol";
-
 /**
  * @author  0xAurelou
  * @title   ERC20 LayerZero
