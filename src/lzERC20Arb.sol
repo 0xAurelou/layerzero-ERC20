@@ -12,11 +12,9 @@ import {OFTV2} from "lz/token/oft/v2/OFTV2.sol";
  */
 
 contract LzERC20Arb is OFTV2 {
-    constructor(
-        address _layerZeroEndpoint,
-        uint256 _initialSupply,
-        uint8 _sharedDecimals
-    ) OFTV2("LzERC20Arb", "lzETHArb", _sharedDecimals, _layerZeroEndpoint) {
+    constructor(address _layerZeroEndpoint, uint256 _initialSupply, uint8 _sharedDecimals)
+        OFTV2("LzERC20Arb", "lzETHArb", _sharedDecimals, _layerZeroEndpoint)
+    {
         _mint(_msgSender(), _initialSupply);
     }
 }

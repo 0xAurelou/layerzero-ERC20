@@ -12,7 +12,7 @@ import "lz/token/oft/v2/ICommonOFT.sol";
 
 contract lzERC20Test is Test {
     uint16 chainIdEth = 1;
-    uint16 chainIdArb = 42161;
+    uint16 chainIdArb = 42_161;
     LZEndpointMock lzEndpointEth;
     LZEndpointMock lzEndpointArb;
     LzERC20Eth lzERC20Eth;
@@ -23,14 +23,11 @@ contract lzERC20Test is Test {
     function setUp() public {
         vm.startPrank(aliceEth);
 
-
         // Creation of Ethereum LzEndpointMock
         lzEndpointEth = new LZEndpointMock(chainIdEth);
-        console.log("lzEndpointEth", address(lzEndpointEth));
 
         // Creation of Arbitrum LzEndpointMock
         lzEndpointArb = new LZEndpointMock(chainIdArb);
-        console.log("lzEndpointArb", address(lzEndpointArb));
 
         // Creation of Ethereum Lz token
         lzERC20Eth = new LzERC20Eth(address(lzEndpointEth), 1000e18, 18);
@@ -39,38 +36,23 @@ contract lzERC20Test is Test {
         lzERC20Arb = new LzERC20Arb(address(lzEndpointArb), 0, 18);
 
         // Set the LzEndpointMock destination chain
-        lzEndpointEth.setDestLzEndpoint(
-            address(lzERC20Arb),
-            address(lzEndpointArb)
-        );
+        lzEndpointEth.setDestLzEndpoint(address(lzERC20Arb), address(lzEndpointArb));
 
         // Set the LzEndpointMock destination chain
-        lzEndpointArb.setDestLzEndpoint(
-            address(lzERC20Eth),
-            address(lzEndpointEth)
-        );
-    
-        // We give alice 1ether for the gas fees
+        lzEndpointArb.setDestLzEndpoint(address(lzERC20Eth), address(lzEndpointEth));
+
+        // We give alice 1 ether for the gas fees
         vm.deal(aliceEth, 1 ether);
 
         vm.prank(aliceEth);
 
         // We set the trustedRemote
-        lzERC20Eth.setTrustedRemote(
-            chainIdArb,
-            abi.encodePacked(lzERC20Arb, lzERC20Eth)
-        );
-
+        lzERC20Eth.setTrustedRemote(chainIdArb, abi.encodePacked(lzERC20Arb, lzERC20Eth));
 
         vm.prank(aliceEth);
-        
-        // We set the trustedRemote
-        lzERC20Arb.setTrustedRemote(
-            chainIdEth,
-            abi.encodePacked(lzERC20Eth, lzERC20Arb)
-        );
 
-        
+        // We set the trustedRemote
+        lzERC20Arb.setTrustedRemote(chainIdEth, abi.encodePacked(lzERC20Eth, lzERC20Arb));
     }
 
     function testSetup() public {
@@ -82,44 +64,33 @@ contract lzERC20Test is Test {
     }
 
     function testTransferEthereumToArbitrum() public {
-        uint fees = 0;
-        
+        uint256 fees = 0;
+
         // We estimate fees
-        (fees, ) = lzERC20Eth.estimateSendFee(
-            chainIdArb,
-            bytes32(uint(uint160(bobArb))),
-            10e18,
-            false,
-            ""
+        (fees,) = lzERC20Eth.estimateSendFee(
+            chainIdArb, bytes32(uint256(uint160(bobArb))), 10e18, false, ""
         );
 
-        // Check if the fees computation have been done correctly 
+        // Check if the fees computation have been done correctly
         assertTrue(fees != 0);
 
         vm.prank(aliceEth);
         lzERC20Eth.approve(address(lzEndpointEth), 1e18);
 
         // callData paramater
-        ICommonOFT.LzCallParams memory callParams = ICommonOFT.LzCallParams(
-            payable(aliceEth),
-            address(0),
-            ""
-        );
+        ICommonOFT.LzCallParams memory callParams =
+            ICommonOFT.LzCallParams(payable(aliceEth), address(0), "");
 
-        // We encode the bobArb address in bytes32
-        bytes memory bobBytes = abi.encodePacked(bobArb);
+        // convert bobAddress to bytes32
+        bytes memory bobBytes = abi.encodePacked(uint256(uint160(bobArb)));
 
         vm.prank(aliceEth);
         // We send 10 lzERC20Eth to the Arbitrum chain
         lzERC20Eth.sendFrom{value: 1 ether}(
-            aliceEth,
-            chainIdArb,
-            bytes32(bobBytes),
-            10e18,
-            callParams
+            aliceEth, chainIdArb, bytes32(bobBytes), 10e18, callParams
         );
 
-        assertEq(lzERC20Eth.balanceOf(aliceEth), 0);
+        assertEq(lzERC20Eth.balanceOf(aliceEth), 990e18);
         assertEq(lzERC20Arb.balanceOf(bobArb), 10e18);
     }
 }

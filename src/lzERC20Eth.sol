@@ -14,11 +14,9 @@ import "forge-std/console.sol";
  */
 
 contract LzERC20Eth is OFTV2 {
-    constructor(
-        address _layerZeroEndpoint,
-        uint256 _initialSupply,
-        uint8 _sharedDecimals
-    ) OFTV2("LzERC20Eth", "lzETHEth", _sharedDecimals, _layerZeroEndpoint) {
+    constructor(address _layerZeroEndpoint, uint256 _initialSupply, uint8 _sharedDecimals)
+        OFTV2("LzERC20Eth", "lzETHEth", _sharedDecimals, _layerZeroEndpoint)
+    {
         _mint(_msgSender(), _initialSupply);
     }
 }
