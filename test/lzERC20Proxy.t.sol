@@ -4,9 +4,9 @@ pragma solidity 0.8.19;
 
 import "forge-std/Test.sol";
 import "src/proxy/lzERC20Proxy.sol";
-import "src/lzERC20Arb.sol";
+import "src/token/lzERC20Arb.sol";
 import "lz/mocks/LZEndpointMock.sol";
-import "src/proxy/lzERC20.sol";
+import "src/token/lzERC20.sol";
 
 import "lz/token/oft/v2/ICommonOFT.sol";
 

@@ -3,8 +3,8 @@
 pragma solidity 0.8.19;
 
 import "forge-std/Test.sol";
-import "src/lzERC20Eth.sol";
-import "src/lzERC20Arb.sol";
+import "src/token/lzERC20Eth.sol";
+import "src/token/lzERC20Arb.sol";
 import "lz/mocks/LZEndpointMock.sol";
 import "openzeppelin-contracts/token/ERC20/ERC20.sol";
 
